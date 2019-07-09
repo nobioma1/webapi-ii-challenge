@@ -65,7 +65,23 @@ postRoutes.get('/', async (req, res) => {
   }
 });
 
-// postRoutes.get()
+postRoutes.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const post = await Posts.findById(id);
+    if (!post[0]) {
+      return res
+        .status(404)
+        .json({ message: 'The post with the specified ID does not exist.' });
+    }
+    res.status(200).json(post);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: 'The post information could not be retrieved.' });
+  }
+});
 
 // postRoutes.get()
 
