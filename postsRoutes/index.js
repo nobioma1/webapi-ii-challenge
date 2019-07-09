@@ -101,7 +101,22 @@ postRoutes.get('/:id/comments', async (req, res) => {
   }
 });
 
-// postRoutes.get()
+postRoutes.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const post = await Posts.findById(id);
+    if (!post[0]) {
+      return res
+        .status(404)
+        .json({ message: 'The post with the specified ID does not exist.' });
+    }
+    await Posts.remove(id);
+    res.status(204).end();
+  } catch (error) {
+    res.status(500).json({ error: 'The post could not be removed' });
+  }
+});
 
 // postRoutes.put()
 
