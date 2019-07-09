@@ -118,6 +118,32 @@ postRoutes.delete('/:id', async (req, res) => {
   }
 });
 
-// postRoutes.put()
+postRoutes.put('/:id', async (req, res) => {
+  const { title, contents } = req.body;
+  const { id } = req.params;
+
+  try {
+    const post = await Posts.findById(id);
+    if (!post) {
+      return res
+        .status(404)
+        .json({ message: 'The post with the specified ID does not exist.' });
+    }
+
+    const newPost = { title: title.trim(), contents: contents.trim() };
+    if (newPost.title && newPost.contents) {
+      await Posts.update(id, newPost);
+      const updated = await Posts.findById(id);
+      return res.status(200).json(updated);
+    }
+    res.status(400).json({
+      errorMessage: 'Please provide title and contents for the post.',
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: 'The post information could not be modified.' });
+  }
+});
 
 module.exports = postRoutes;
