@@ -54,7 +54,16 @@ postRoutes.post('/:id/comments', async (req, res) => {
   }
 });
 
-// postRoutes.get()
+postRoutes.get('/', async (req, res) => {
+  try {
+    const posts = await Posts.find();
+    return res.status(200).json(posts);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: 'The posts information could not be retrieved.' });
+  }
+});
 
 // postRoutes.get()
 
